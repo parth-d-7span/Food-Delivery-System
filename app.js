@@ -1,8 +1,11 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const connectDB = require("./src/config/db");
+require("dotenv").config(); 
 
-dotenv.config();
+const express = require("express");
+const connectDB = require("./src/config/db");
+const menuRoutes = require('./src/modules/menu-management/menu.routes');
+const errorMiddleware = require("./src/middlewares/errorMiddleware");
+
+
 
 // Connect to MongoDB
 connectDB();
@@ -18,6 +21,11 @@ app.get("/", (req, res) => {
     message: "Food Delivery System API is running 🚀",
   });
 });
+
+app.use("/api/menu", menuRoutes);
+
+
+app.use(errorMiddleware);
 
 // ─── Routes ─────────────────────────────────────────────────────────────────
 // TODO: Import and use module routes here
