@@ -3,7 +3,7 @@ import Restaurant from "./restaurant.model.js";
 
  // Create a new restaurant
  
-export const createRestaurant = async (data) => {
+const createRestaurant = async (data) => {
   return await Restaurant.create(data);
 };
 
@@ -17,14 +17,14 @@ const getAllRestaurants = async () => {
 
  // Get a single restaurant by ID
  
-export const getRestaurantById = async (id) => {
+const getRestaurantById = async (id) => {
   return await Restaurant.findById(id);
 };
 
 
  // Update a restaurant by ID
  
-export const updateRestaurantById = async (id, data) => {
+const updateRestaurantById = async (id, data) => {
   return await Restaurant.findByIdAndUpdate(id, data, {
     new: true,
     runValidators: true,
@@ -34,10 +34,20 @@ export const updateRestaurantById = async (id, data) => {
 
  // Soft delete a restaurant
  
-export const softDeleteRestaurantById = async (id, userId) => {
+const softDeleteRestaurantById = async (id, userId) => {
   return await Restaurant.findByIdAndUpdate(
     id,
     { deletedAt: new Date(), updatedBy: userId },
     { new: true }
   );
 };
+
+const restaurantDAO = {
+  createRestaurant,
+  getAllRestaurants,
+  getRestaurantById,
+  updateRestaurantById,
+  softDeleteRestaurantById,
+};
+
+export default restaurantDAO;

@@ -1,5 +1,5 @@
 import express from "express";
-import restaurantController from "./restaurant.controller.js";
+import * as restaurantController from "./restaurant.controller.js";
 import { verifyAdminToken } from "../../middlewares/verifyadmin.middleware.js";
 const router = express.Router(); 
 

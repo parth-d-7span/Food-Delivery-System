@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 
 //Add a new restaurant
 
-export const addRestaurant = async (body, userId) => {
+const addRestaurant = async (body, userId) => {
   const { name, description, address, phoneNumber } = body;
 
   const restaurant = await restaurantDAO.createRestaurant({
@@ -21,14 +21,14 @@ export const addRestaurant = async (body, userId) => {
 
 //Fetch all restaurants
 
-export const fetchAllRestaurants = async () => {
+const fetchAllRestaurants = async () => {
   const restaurants = await restaurantDAO.getAllRestaurants();
   return restaurants;
 };
 
 //  Fetch a single restaurant by ID
 
-export const fetchRestaurantById = async (id) => {
+const fetchRestaurantById = async (id) => {
   const restaurant = await restaurantDAO.getRestaurantById(id);
   if (!restaurant) {
     const error = new Error("Restaurant not found");
@@ -40,7 +40,7 @@ export const fetchRestaurantById = async (id) => {
 
 // Update restaurant details
 
-export const modifyRestaurant = async (id, body, userId) => {
+const modifyRestaurant = async (id, body, userId) => {
   const restaurant = await restaurantDAO.getRestaurantById(id);
   if (!restaurant) {
     const error = new Error("Restaurant not found");
@@ -64,7 +64,7 @@ export const modifyRestaurant = async (id, body, userId) => {
 
 // Soft delete a restaurant
 
-export const removeRestaurant = async (id, userId) => {
+const removeRestaurant = async (id, userId) => {
   const restaurant = await restaurantDAO.getRestaurantById(id);
   if (!restaurant) {
     const error = new Error("Restaurant not found");
@@ -75,3 +75,13 @@ export const removeRestaurant = async (id, userId) => {
   await restaurantDAO.softDeleteRestaurantById(id, userId);
   return { message: "Restaurant deleted successfully" };
 };
+
+const restaurantService = {
+  addRestaurant,
+  fetchAllRestaurants,
+  fetchRestaurantById,
+  modifyRestaurant,
+  removeRestaurant,
+};
+
+export default restaurantService;
