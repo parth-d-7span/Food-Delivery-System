@@ -1,10 +1,10 @@
 import User from "../users/user.model.js";
 
-const findUserByEmail = async (email) => await User.findOne({ email });
+const findUserByEmail = async (email) => User.findOne({ email });
 
 const findUserByEmailWithPassword = async (email) =>
-  await User.findOne({ email }).select("+passwordHash");
+  User.findOne({ email }).select("+passwordHash");
 
-const createUser = async (userData) => await User.create(userData);
+const createUser = async (userData) => User.create(userData);
 
 export { findUserByEmail, findUserByEmailWithPassword, createUser };

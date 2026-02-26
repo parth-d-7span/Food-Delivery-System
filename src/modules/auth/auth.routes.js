@@ -1,10 +1,13 @@
 import { Router } from "express";
+
+import validate from "../../middlewares/validate.js";
+import { registerSchema, loginSchema } from "../../config/schemas.js";
+
 import { register, login } from "./auth.controller.js";
-import { validateRegister, validateLogin } from "../../middlewares/validate.js";
 
 const router = Router();
 
-router.post("/register", validateRegister, register);
-router.post("/login", validateLogin, login);
+router.post("/register", validate(registerSchema), register);
+router.post("/login", validate(loginSchema), login);
 
 export default router;

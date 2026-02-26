@@ -29,7 +29,7 @@ const updateUser = async (req, res, next) => {
     const { id } = req.params;
     const { name, phoneNumber, address } = req.body;
     await updateUserService(id, { name, phoneNumber, address });
-    res.status(200).json({ success: true, message: "User updated successfully." });
+    return res.status(200).json({ success: true, message: "User updated successfully." });
   } catch (error) {
     next(error);
   }

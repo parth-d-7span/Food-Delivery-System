@@ -1,6 +1,9 @@
 import express from "express";
+
 import { API_PREFIX, PORT, NODE_ENV } from "./src/utils/env.js";
 import connectDB from "./src/config/db.js";
+import logger from "./src/utils/logger.js";
+import requestLogger from "./src/middlewares/requestLogger.js";
 import authRoutes from "./src/modules/auth/auth.routes.js";
 import userRoutes from "./src/modules/users/user.routes.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
@@ -9,6 +12,8 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(requestLogger);
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Food Delivery System API is running." });
@@ -26,7 +31,7 @@ app.use(errorHandler);
 const startServer = async () => {
   await connectDB();
   app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT} [${NODE_ENV}]`);
+    logger.info(`Server running on http://localhost:${PORT} [${NODE_ENV}]`);
   });
 };
 

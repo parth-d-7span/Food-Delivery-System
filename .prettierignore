@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Logs
+logs/
+
+# Environment files — never format these
+.env
+.env.example
+
+# Lock files — auto generated, don't touch
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

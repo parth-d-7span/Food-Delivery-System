@@ -1,9 +1,13 @@
 import { Router } from "express";
-import { getUsers, getUser, updateUser, deleteUser } from "./user.controller.js";
+
 import authenticate from "../../middlewares/authenticate.js";
 import authorize from "../../middlewares/authorize.js";
-import { validateUpdateUser } from "../../middlewares/validate.js";
+import validate from "../../middlewares/validate.js";
+import { updateUserSchema } from "../../config/schemas.js";
 import ROLES from "../../constants/roles.js";
+
+import { getUsers, getUser, updateUser, deleteUser } from "./user.controller.js";
+
 
 const router = Router();
 
@@ -14,7 +18,7 @@ router.get("/", authenticate, authorize(ROLES.ADMIN), getUsers);
 router.get("/:id", authenticate, getUser);
 
 // PUT    /api/v1/users/:id    — self updates own profile by id
-router.put("/:id", authenticate, validateUpdateUser, updateUser);
+router.put("/:id", authenticate, validate(updateUserSchema), updateUser);
 
 // DELETE /api/v1/users/:id    — soft delete by self or admin
 router.delete("/:id", authenticate, deleteUser);
