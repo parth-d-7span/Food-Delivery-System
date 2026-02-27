@@ -4,11 +4,15 @@
     "cloudinary": "^1.41.3",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "http-errors": "^2.0.1",
+    "http-status": "^2.1.0",
     "joi": "^18.0.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.2",
     "multer": "^2.0.2",
-    "multer-storage-cloudinary": "^4.0.0"
+    "multer-storage-cloudinary": "^4.0.0",
+    "validator": "^13.15.26",
+    "zod": "^4.3.6"
   },
   "name": "food-delivery-system",
   "version": "1.0.0",
@@ -16,7 +20,9 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -25,12 +31,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/parth-d-7span/Food-Delivery-System/issues"
   },
   "homepage": "https://github.com/parth-d-7span/Food-Delivery-System#readme",
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.39.3",
     "nodemon": "^3.1.14"
   }
 }

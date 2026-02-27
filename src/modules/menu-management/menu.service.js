@@ -1,48 +1,76 @@
-const menuDAO = require("./menu.dao");
-const ApiError = require("../../utils/ApiError");
-const cloudinary = require("../../config/cloudinary");
+import menuDAO from "./menu.dao.js";
+import ApiError from "../../utils/ApiError.js";
+import cloudinary from "../../config/cloudinary.js"; 
+import menuItem from "./menu.model.js";
+import mongoose from "mongoose";
 
-class MenuService {
 
-  async getAllMenuItems() {
+
+// Get all menu items
+const getAllMenuItems = async () => {
 
   const menuItems = await menuDAO.getAllMenuItems();
 
   return menuItems;
 };
 
-  // Restaurant adds menu item
-  async addMenuItem(data, restaurantId) {
 
-    const menu = await menuDAO.create({
-      ...data,
-      restaurantId,
-    });
+// Restaurant adds menu item
+const addMenuItem = async (data, restaurantId) => {
 
-    return menu;
-  }
+  const menu = await menuDAO.create({
+    ...data,
+    restaurantId,
+  });
 
-  // User gets menu by restaurant
-  async getMenuByRestaurant(restaurantId) {
+  return menu;
+};
 
-    const menu = await menuDAO.findByRestaurant(restaurantId);
 
-    return menu;
-  }
+// User gets menu by restaurant
+const getMenuByRestaurant = async (restaurantId) => {
 
-  // Restaurant updates menu item
-  async updateMenu(menuId, restaurantId, updateData) {
+  const menu = await menuDAO.findByRestaurant(restaurantId);
 
-    const menu = await menuDAO.findById(menuId);
+  return menu;
+};
 
-    if (!menu)
-      throw new ApiError(404, "Menu not found");
 
-    if (menu.restaurantId.toString() !== restaurantId)
+// Restaurant updates menu item
+const updateMenu = async (menuId, userId, updateData) => {
+
+  const menu = await menuItem.findById(menuId);
+
+  if (!menu)
+    throw new ApiError(404, "Menu not found");
+
+  // const menuFromDAO = await menuItem.findById(menuId).populate("restaurantId", "createdBy");
+
+  // if (!menuFromDAO || !menuFromDAO.restaurantId)
+  //   throw new ApiError(404, "Menu or restaurant not found");
+
+  // const resCreatedBy = menuFromDAO.restaurantId.createdBy;
+  // if (!resCreatedBy || resCreatedBy.toString() !== userId)
+  //   throw new ApiError(403, "Not allowed");
+
+  const restaurantDoc = await mongoose.connection.db
+    .collection("restaurants")
+    .findOne({ _id: new mongoose.Types.ObjectId(menu.restaurantId) });
+
+  // if the restaurant record has been removed, we no longer can verify ownership.
+  // instead of failing with 404 we allow the update to proceed but log a warning.
+  if (restaurantDoc) {
+    const resCreatedBy = restaurantDoc.createdBy; 
+    if (!resCreatedBy || resCreatedBy.toString() !== userId)
       throw new ApiError(403, "Not allowed");
+  } else {
+    console.warn(
+      `Restaurant document for menu ${menuId} not found; skipping ownership check.`
+    );
+  }
 
 
-    // DELETE OLD IMAGE
+  // DELETE OLD IMAGE FROM CLOUDINARY
   if (updateData.image && menu.image) {
 
     const publicId = menu.image
@@ -52,28 +80,47 @@ class MenuService {
       .split(".")[0];
 
     await cloudinary.uploader.destroy(publicId);
-
   }
 
-    return await menuDAO.update(menuId, updateData);
-  }
 
-  // Restaurant deletes menu item
-  async deleteMenu(menuId, restaurantId) {
+  return await menuDAO.update(menuId, updateData);
+};
 
-    const menu = await menuDAO.findById(menuId);
 
-    if (!menu)
-      throw new ApiError(404, "Menu not found");
+// Restaurant deletes menu item
+const deleteMenu = async (menuId, restaurantId) => {
 
-    if (menu.restaurantId.toString() !== restaurantId)
+  const menu = await menuDAO.findById(menuId);
+
+  if (!menu)
+    throw new ApiError(404, "Menu not found");
+
+  // look up restaurant directly (bypass soft-delete hooks)
+  const restaurantDoc = await mongoose.connection.db
+    .collection("restaurants")
+    .findOne({ _id: new mongoose.Types.ObjectId(menu.restaurantId) });
+
+  if (restaurantDoc) {
+    // owner must match
+    const resCreatedBy = restaurantDoc.createdBy;
+    if (!resCreatedBy || resCreatedBy.toString() !== restaurantId)
       throw new ApiError(403, "Not allowed");
-
-    await menuDAO.delete(menuId);
-
-    return;
+  } else {
+    console.warn(
+      `Restaurant document for menu ${menuId} not found; skipping ownership check on delete.`
+    );
   }
 
-}
+  await menuDAO.delete(menuId);
 
-module.exports = new MenuService();
+  return;
+};
+
+
+export default {
+  getAllMenuItems,
+  addMenuItem,
+  getMenuByRestaurant,
+  updateMenu,
+  deleteMenu
+};

@@ -1,6 +1,7 @@
-const Joi = require("joi");
+import e from "express";
+import Joi from "joi";
 
-const addMenuValidation = Joi.object({
+export const addMenuValidation = Joi.object({
 
   name: Joi.string()
     .min(2)
@@ -45,7 +46,7 @@ const addMenuValidation = Joi.object({
 
 
 
-const updateMenuValidation = Joi.object({
+export const updateMenuValidation = Joi.object({
 
   name: Joi.string().min(2).max(100),
 
@@ -68,8 +69,3 @@ const updateMenuValidation = Joi.object({
 
 });
 
-
-module.exports = {
-  addMenuValidation,
-  updateMenuValidation
-};

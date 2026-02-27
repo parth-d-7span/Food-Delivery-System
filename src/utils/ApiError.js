@@ -1,5 +1,7 @@
 class ApiError extends Error {
+
   constructor(statusCode, message) {
+
     super(message);
 
     this.statusCode = statusCode;
@@ -7,7 +9,9 @@ class ApiError extends Error {
     this.success = false;
 
     Error.captureStackTrace(this, this.constructor);
+
   }
+
 }
 
-module.exports = ApiError;
+export default ApiError;

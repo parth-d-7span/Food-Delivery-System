@@ -1,11 +1,14 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const menuController = require("./menu.controller");
-const mockAuth = require("../../middlewares/mockAuth.middleware");
-const validate = require("../../middlewares/validate.middleware");
-const role = require("../../middlewares/role.middleware");
-const {addMenuValidation, updateMenuValidation} = require("./menu.validation");
-const upload = require("../../middlewares/upload.middleware");
+import menuController from "./menu.controller.js";
+import  ROLES  from "../../constants/roles.js";
+import validate from "../../middlewares/validate.middleware.js";
+import { addMenuValidation, updateMenuValidation } from "./menu.validation.js";
+import upload from "../../middlewares/upload.middleware.js";
+import authenticate from "../../middlewares/authenticate.js";
+import authorize from "../../middlewares/authorize.js";
+
+
 
 
 //show all items
@@ -17,8 +20,8 @@ router.get("/restaurant/:restaurantId", menuController.getMenuByRestaurant);
 //  Add menu item - restaurant only
 router.post(
   "/",
-  mockAuth,
-  role("restaurant"),
+  authenticate,
+  authorize(ROLES.ADMIN),
   upload.single("image"),  
   validate(addMenuValidation),
   menuController.addMenu
@@ -27,19 +30,19 @@ router.post(
 // update menu item - restaurant only
 router.put(
   "/:menuId",
-  mockAuth,
-  role("restaurant"),
+  authenticate,
+  authorize(ROLES.ADMIN),
   upload.single("image"),
   validate(updateMenuValidation),
-  menuController.updateMenu
+  menuController.updateMenu 
 );
 
 // Delete menu item - restaurant only
 router.delete(
   "/:menuId",
-  mockAuth,
-  role("restaurant"),
+  authenticate,
+  authorize(ROLES.ADMIN),
   menuController.deleteMenu
 );
 
-module.exports = router;
+export default router;
