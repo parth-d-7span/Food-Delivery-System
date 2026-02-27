@@ -14,7 +14,7 @@ const authenticate = async (req, res, next) => {
     const decoded = verifyToken(token);
 
     const user = await User.findById(decoded.id).select("-passwordHash");
-console.log("Authenticated user:", user);
+
     if (!user) {
       return next(createError.Unauthorized("User no longer exists."));
     }

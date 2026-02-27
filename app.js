@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Food Delivery System API is running." });
+  res.json({ success: true, message: "Food Delivery System API is running." });
 });
 
 app.use(`${API_PREFIX}/auth`, authRoutes);
@@ -22,6 +23,7 @@ app.use(`${API_PREFIX}/restaurants`,restaurantRoutes);
 app.use(`${API_PREFIX}/menu`,menuRoutes);
 
 app.use((req, res) => {
+  res.status(404).json({ success: false, message: "Route not found." });
   res.status(404).json({ success: false, message: "Route not found." });
 });
 
@@ -33,5 +35,14 @@ const startServer = async () => {
     console.log(`Server running on http://localhost:${PORT} [${NODE_ENV}]`);
   });
 };
+app.use(errorHandler);
 
+const startServer = async () => {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT} [${NODE_ENV}]`);
+  });
+};
+
+startServer();
 startServer();

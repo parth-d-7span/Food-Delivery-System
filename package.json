@@ -23,6 +23,10 @@
     "dev": "nodemon app.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -32,11 +36,14 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/parth-d-7span/Food-Delivery-System/issues"
   },
   "homepage": "https://github.com/parth-d-7span/Food-Delivery-System#readme",
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.39.3",
     "@eslint/js": "^9.0.0",
     "eslint": "^9.39.3",
     "nodemon": "^3.1.14"
