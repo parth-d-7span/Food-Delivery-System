@@ -1,0 +1,17 @@
+const MenuItem = require("./menu.model");
+
+exports.createMenuItem = (data) => {
+  return MenuItem.create(data);
+};
+
+exports.getMenuByRestaurant = (restaurantId) => {
+  return MenuItem.find({ restaurantId });
+};
+
+exports.updateMenuItem = (menuId, data) => {
+  return MenuItem.findByIdAndUpdate(menuId, data, { new: true });
+};
+
+exports.deleteMenuItem = (menuId) => {
+  return MenuItem.findByIdAndDelete(menuId);
+};
