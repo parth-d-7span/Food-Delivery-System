@@ -7,6 +7,8 @@ import requestLogger from "./src/middlewares/requestLogger.js";
 import authRoutes from "./src/modules/auth/auth.routes.js";
 import userRoutes from "./src/modules/users/user.routes.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
+import restaurantRoutes from "./src/modules/restaurant/restaurant.routes.js";
+import menuRoutes from "./src/modules/menu-management/menu.routes.js";
 
 const app = express();
 
@@ -17,12 +19,16 @@ app.use(requestLogger);
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Food Delivery System API is running." });
+  res.json({ success: true, message: "Food Delivery System API is running." });
 });
 
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/users`, userRoutes);
+app.use(`${API_PREFIX}/restaurants`,restaurantRoutes);
+app.use(`${API_PREFIX}/menu`,menuRoutes);
 
 app.use((req, res) => {
+  res.status(404).json({ success: false, message: "Route not found." });
   res.status(404).json({ success: false, message: "Route not found." });
 });
 
@@ -34,5 +40,9 @@ const startServer = async () => {
     logger.info(`Server running on http://localhost:${PORT} [${NODE_ENV}]`);
   });
 };
+app.use(errorHandler);
 
+
+
+startServer();
 startServer();
