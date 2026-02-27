@@ -37,12 +37,7 @@ const startServer = async () => {
 };
 app.use(errorHandler);
 
-const startServer = async () => {
-  await connectDB();
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT} [${NODE_ENV}]`);
-  });
-};
+
 
 startServer();
 startServer();
