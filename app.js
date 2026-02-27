@@ -19,16 +19,14 @@ app.use(requestLogger);
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Food Delivery System API is running." });
-  res.json({ success: true, message: "Food Delivery System API is running." });
 });
 
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/users`, userRoutes);
-app.use(`${API_PREFIX}/restaurants`,restaurantRoutes);
-app.use(`${API_PREFIX}/menu`,menuRoutes);
+app.use(`${API_PREFIX}/restaurants`, restaurantRoutes);
+app.use(`${API_PREFIX}/menu`, menuRoutes);
 
 app.use((req, res) => {
-  res.status(404).json({ success: false, message: "Route not found." });
   res.status(404).json({ success: false, message: "Route not found." });
 });
 
@@ -42,7 +40,4 @@ const startServer = async () => {
 };
 app.use(errorHandler);
 
-
-
-startServer();
 startServer();
