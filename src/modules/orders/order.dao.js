@@ -4,15 +4,19 @@ import OrderItem from "./orderItem.model.js";
 const createOrder = async (orderData) => Order.create(orderData);
 
 const findOrderById = async (id) =>
-  Order.findById(id).populate("userId", "name email").populate("restaurantId", "name address");
+  Order.findById(id)
+    .populate({ path: "userId", select: "name email" })
+    .populate({ path: "restaurantId", select: "name address phoneNumber", match: { deletedAt: null } });
 
 const findOrdersByUser = async (userId) =>
-  Order.find({ userId }).populate("restaurantId", "name address").sort({ createdAt: -1 });
+  Order.find({ userId })
+    .populate({ path: "restaurantId", select: "name address phoneNumber", match: { deletedAt: null } })
+    .sort({ createdAt: -1 });
 
 const findAllOrders = async () =>
   Order.find()
-    .populate("userId", "name email")
-    .populate("restaurantId", "name address")
+    .populate({ path: "userId", select: "name email" })
+    .populate({ path: "restaurantId", select: "name address phoneNumber", match: { deletedAt: null } })
     .sort({ createdAt: -1 });
 
 const updateOrderStatus = async (id, status) =>

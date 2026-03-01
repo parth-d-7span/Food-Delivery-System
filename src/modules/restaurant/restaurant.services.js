@@ -11,8 +11,6 @@ const assertValidRestaurantId = (id) => {
   }
 };
 
-import restaurantDAO from "./restaurant.dao.js";
-
 //Add a new restaurant
 
 const addRestaurant = async (body, userId) => {

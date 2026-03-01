@@ -86,7 +86,7 @@ const updateMenu = async (menuId, userId, updateData) => {
   }
 
 
-  return await menuDAO.update(menuId, updateData);
+  return menuDAO.update(menuId, updateData);
 };
 
 

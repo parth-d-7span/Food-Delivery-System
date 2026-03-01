@@ -3,19 +3,19 @@ import Menu from "./menu.model.js";
 
 // Get all menu items
 const getAllMenuItems = async () => {
-  return await Menu.find();
+  return Menu.find();
 };
 
 
 // Create menu item
 const create = async (menuData) => {
-  return await Menu.create(menuData);
+  return Menu.create(menuData);
 };
 
 
 // Find menu by restaurant
 const findByRestaurant = async (restaurantId) => {
-  return await Menu.find({
+  return Menu.find({
     restaurantId,
     isAvailable: true,
   });
@@ -24,13 +24,13 @@ const findByRestaurant = async (restaurantId) => {
 
 // Find menu by ID
 const findById = async (menuId) => {
-  return await Menu.findById(menuId);
+  return Menu.findById(menuId);
 };
 
 
 // Update menu
 const update = async (menuId, updateData) => {
-  return await Menu.findByIdAndUpdate(
+  return Menu.findByIdAndUpdate(
     menuId,
     updateData,
     { new: true }
@@ -40,7 +40,7 @@ const update = async (menuId, updateData) => {
 
 // Delete menu
 const deleteMenu = async (menuId) => {
-  return await Menu.findByIdAndDelete(menuId);
+  return Menu.findByIdAndDelete(menuId);
 };
 
 

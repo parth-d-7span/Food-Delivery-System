@@ -52,6 +52,20 @@ export const updateUserSchema = z
     address: addressSchema.optional(),
   })
   .refine((data) => Object.values(data).some((val) => val !== undefined), {
-    message:
-      "Provide at least one field to update: name, phoneNumber, address.",
+    message: "Provide at least one field to update: name, phoneNumber, address.",
   });
+
+export const placeOrderSchema = z.object({
+  deliveryAddress: z
+    .string({ required_error: "Delivery address is required." })
+    .trim()
+    .min(5, "Delivery address must be at least 5 characters."),
+});
+
+export const updateOrderStatusSchema = z.object({
+  status: z.enum(["pending", "confirmed", "delivered", "cancelled"], {
+    errorMap: () => ({
+      message: "Status must be one of: pending, confirmed, delivered, cancelled.",
+    }),
+  }),
+});

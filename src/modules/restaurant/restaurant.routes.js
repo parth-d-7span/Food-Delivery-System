@@ -4,9 +4,9 @@ import authorize from "../../middlewares/authorize.js";
 import ROLES from "../../constants/roles.js";
 import authenticate from "../../middlewares/authenticate.js";
 import validate from "../../middlewares/validate.js";
+import { addRestaurantSchema, updateRestaurantSchema } from "../../middlewares/restaurant.validation.js";
 
 import * as restaurantController from "./restaurant.controller.js";
-import { addRestaurantSchema, updateRestaurantSchema } from "../../middlewares/restaurant.validation.js";
 
 const router = express.Router(); 
 

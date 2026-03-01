@@ -52,7 +52,9 @@ restaurantSchema.pre("find", function () {
 });
 
 restaurantSchema.pre("findOne", function () {
-  this.where({ deletedAt: null });
+  if (!this.mongooseOptions().populate) {
+    this.where({ deletedAt: null });
+  }
 });
 
 restaurantSchema.pre("findOneAndUpdate", function () {

@@ -2,8 +2,8 @@ import { Router } from "express";
 
 import authenticate from "../../middlewares/authenticate.js";
 import validate from "../../middlewares/validate.js";
-
 import { addToCartSchema, updateCartItemQuantitySchema } from "../../middlewares/cart.validation.js";
+
 import {
   addItemToCart,
   updateItemQuantity,

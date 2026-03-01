@@ -26,11 +26,11 @@ const validate = (schema) => {
         };
       }
     } else {
-      throw new ApiError(500, "Invalid validation schema provided");
+      return next(new ApiError(500, "Invalid validation schema provided"));
     }
 
     if (error) {
-      throw new ApiError(400, error.details[0].message);
+      return next(new ApiError(400, error.details[0].message));
     }
 
     next();

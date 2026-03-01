@@ -1,6 +1,12 @@
 import Joi from "joi";
 
 export const addMenuValidation = Joi.object({
+  restaurantId: Joi.string().hex().length(24).required().messages({
+    "string.empty": "Restaurant ID is required",
+    "any.required": "Restaurant ID is required",
+    "string.length": "Invalid restaurant ID",
+  }),
+
   name: Joi.string().min(2).max(100).required().messages({
     "string.empty": "Menu name is required",
     "any.required": "Menu name is required",
@@ -21,6 +27,8 @@ export const addMenuValidation = Joi.object({
       "any.only": "Invalid category",
       "any.required": "Category is required",
     }),
+
+  isAvailable: Joi.boolean(),
 
   image: Joi.string().uri().allow(null, ""),
 });
