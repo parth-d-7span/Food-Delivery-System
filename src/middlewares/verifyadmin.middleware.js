@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+
 import { JWT_SECRET } from "../utils/env.js";
 import User from "../modules/users/user.model.js";
 
@@ -26,6 +27,6 @@ export const verifyAdminToken = async (req, res, next) => {
     req.user = user; // Attach user document to request
     next();
   } catch (error) {
-    return res.status(401).json({ success: false, message: "Invalid token" });
+    return res.status(401).json({ success: false, message: "Invalid token" }, error);
   }
 };

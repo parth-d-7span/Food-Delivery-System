@@ -1,8 +1,10 @@
 import express from "express";
-import * as restaurantController from "./restaurant.controller.js";
+
 import authorize from "../../middlewares/authorize.js";
 import ROLES from "../../constants/roles.js";
 import authenticate from "../../middlewares/authenticate.js";
+
+import * as restaurantController from "./restaurant.controller.js";
 const router = express.Router(); 
 
 router.post("/",authenticate,authorize(ROLES.ADMIN), restaurantController.addRestaurant);

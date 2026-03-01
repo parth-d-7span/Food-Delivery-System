@@ -1,5 +1,6 @@
-import restaurantDAO from "./restaurant.dao.js";
 import httpStatus from "http-status";
+
+import restaurantDAO from "./restaurant.dao.js";
 
 //Add a new restaurant
 

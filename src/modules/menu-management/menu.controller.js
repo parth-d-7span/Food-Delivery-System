@@ -1,5 +1,6 @@
-import menuService from "./menu.service.js";
 import ApiResponse from "../../utils/ApiResponse.js";
+
+import menuService from "./menu.service.js";
 
 
 // Get all menu items
@@ -72,7 +73,7 @@ const updateMenu = async (req, res, next) => {
 
     const userId = req.user._id;
 
-    let updateData = { ...req.body };
+    const updateData = { ...req.body };
 
     if (req.file) {
       updateData.image = req.file.path;

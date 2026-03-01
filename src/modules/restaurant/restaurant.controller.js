@@ -1,5 +1,6 @@
-import restaurantService from "./restaurant.services.js";
 import httpStatus from "http-status";
+
+import restaurantService from "./restaurant.services.js";
 
 // POST Add a new restaurant
  
