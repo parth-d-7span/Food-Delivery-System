@@ -9,6 +9,7 @@ import userRoutes from "./src/modules/users/user.routes.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
 import restaurantRoutes from "./src/modules/restaurant/restaurant.routes.js";
 import menuRoutes from "./src/modules/menu-management/menu.routes.js";
+import cartRoutes from "./src/modules/cart/cart.routes.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/users`, userRoutes);
 app.use(`${API_PREFIX}/restaurants`, restaurantRoutes);
 app.use(`${API_PREFIX}/menu`, menuRoutes);
+app.use(`${API_PREFIX}/cart`,cartRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Route not found." });
