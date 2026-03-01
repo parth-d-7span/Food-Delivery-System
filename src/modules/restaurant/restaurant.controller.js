@@ -6,11 +6,11 @@ import restaurantService from "./restaurant.services.js";
  
 export const addRestaurant = async (req, res) => {
   try {
-    // const testUserId = "665f1a2b3c4d5e6f7a8b9c01";
     const restaurant = await restaurantService.addRestaurant(req.body, req.user._id);
     return res.status(httpStatus.CREATED).json({
       success: true,
       message: "Restaurant created successfully",
+      data: restaurant,
     });
   } catch (error) {
     return res.status(error.statusCode || httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -76,6 +76,7 @@ export const updateRestaurant = async (req, res) => {
     return res.status(httpStatus.OK).json({
       success: true,
       message: "Restaurant updated successfully",
+      data: restaurant,
     });
   } catch (error) {
     return res.status(error.statusCode || httpStatus.INTERNAL_SERVER_ERROR).json({
