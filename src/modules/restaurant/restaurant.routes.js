@@ -6,7 +6,7 @@ import authenticate from "../../middlewares/authenticate.js";
 import validate from "../../middlewares/validate.js";
 
 import * as restaurantController from "./restaurant.controller.js";
-import { addRestaurantSchema, updateRestaurantSchema } from "./restaurant.validation.js";
+import { addRestaurantSchema, updateRestaurantSchema } from "../../middlewares/restaurant.validation.js";
 
 const router = express.Router(); 
 
