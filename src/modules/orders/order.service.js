@@ -1,5 +1,9 @@
-import createError from "http-errors";
 import mongoose from "mongoose";
+
+import { BadRequest, NotFound, Forbidden } from "../../utils/errors.js";
+import logger from "../../config/logger.js";
+import Cart from "../cart/cart.model.js";
+import ROLES from "../../constants/roles.js";
 
 import { ORDER_STATUS } from "./order.model.js";
 import {
@@ -11,29 +15,22 @@ import {
   createOrderItems,
   findOrderItemsByOrderId,
 } from "./order.dao.js";
-import Cart from "../cart/cart.model.js";
-import ROLES from "../../constants/roles.js";
-import logger from "../../config/logger.js";
 
 const placeOrder = async ({ userId, deliveryAddress }) => {
   const cart = await Cart.findOne({ userId });
 
   if (!cart || cart.items.length === 0) {
-    throw createError.BadRequest(
-      "Your cart is empty. Add items before placing an order."
-    );
+    throw BadRequest("Your cart is empty. Add items before placing an order.");
   }
 
   const { default: menuDAO } = await import("../menu-management/menu.dao.js");
   const firstMenuItem = await menuDAO.findById(cart.items[0].menuItemId);
-  const restaurantId = firstMenuItem.restaurantId;
 
   if (!firstMenuItem) {
-    throw createError.BadRequest(
-      "Some items in your cart are no longer available. Please update your cart."
-    );
+    throw BadRequest("Some items in your cart are no longer available. Please update your cart.");
   }
 
+  const restaurantId = firstMenuItem.restaurantId;
   const totalAmount = cart.totalAmount;
 
   const session = await mongoose.startSession();
@@ -62,13 +59,13 @@ const placeOrder = async ({ userId, deliveryAddress }) => {
 
     await Cart.findOneAndUpdate(
       { userId },
-      { items: [], totalAmount: 0, quantity: 0, menuItemId: null }
+      { items: [], totalAmount: 0, quantity: 0, menuItemId: null },
     );
 
     await session.commitTransaction();
 
     logger.info(
-      `Order placed: ${order._id} | User: ${userId} | Total: ₹${totalAmount}`
+      `Order placed: ${order._id} | User: ${userId} | Total: ₹${totalAmount}`,
     );
 
     return order;
@@ -82,13 +79,13 @@ const placeOrder = async ({ userId, deliveryAddress }) => {
 
 const getOrder = async (orderId, requestedBy) => {
   const order = await findOrderById(orderId);
-  if (!order) throw createError.NotFound("Order not found.");
+  if (!order) throw NotFound("Order not found.");
 
   if (
     requestedBy.role !== ROLES.ADMIN &&
     order.userId._id.toString() !== requestedBy._id.toString()
   ) {
-    throw createError.Forbidden("You are not allowed to view this order.");
+    throw Forbidden("You are not allowed to view this order.");
   }
 
   const orderItems = await findOrderItemsByOrderId(orderId);
@@ -98,18 +95,17 @@ const getOrder = async (orderId, requestedBy) => {
 
 const getMyOrders = async (userId) => findOrdersByUser(userId);
 const getAllOrders = async () => findAllOrders();
+
 const cancelOrder = async (orderId, requestedBy) => {
   const order = await findOrderById(orderId);
-  if (!order) throw createError.NotFound("Order not found.");
+  if (!order) throw NotFound("Order not found.");
 
   if (order.userId._id.toString() !== requestedBy._id.toString()) {
-    throw createError.Forbidden("You are not allowed to cancel this order.");
+    throw Forbidden("You are not allowed to cancel this order.");
   }
 
   if (order.status !== ORDER_STATUS.PENDING) {
-    throw createError.BadRequest(
-      `Order cannot be cancelled. Current status is '${order.status}'.`
-    );
+    throw BadRequest(`Order cannot be cancelled. Current status is '${order.status}'.`);
   }
 
   await updateOrderStatus(orderId, ORDER_STATUS.CANCELLED);
@@ -118,7 +114,7 @@ const cancelOrder = async (orderId, requestedBy) => {
 
 const updateStatus = async (orderId, newStatus) => {
   const order = await findOrderById(orderId);
-  if (!order) throw createError.NotFound("Order not found.");
+  if (!order) throw NotFound("Order not found.");
 
   const validTransitions = {
     [ORDER_STATUS.PENDING]: [ORDER_STATUS.CONFIRMED, ORDER_STATUS.CANCELLED],
@@ -130,15 +126,11 @@ const updateStatus = async (orderId, newStatus) => {
   const allowed = validTransitions[order.status];
 
   if (!allowed.includes(newStatus)) {
-    throw createError.BadRequest(
-      `Cannot change status from '${order.status}' to '${newStatus}'.`
-    );
+    throw BadRequest(`Cannot change status from '${order.status}' to '${newStatus}'.`);
   }
 
   await updateOrderStatus(orderId, newStatus);
-  logger.info(
-    `Order status updated: ${orderId} | '${order.status}' → '${newStatus}'`
-  );
+  logger.info(`Order status updated: ${orderId} | '${order.status}' → '${newStatus}'`);
 };
 
 export { placeOrder, getOrder, getMyOrders, getAllOrders, cancelOrder, updateStatus };

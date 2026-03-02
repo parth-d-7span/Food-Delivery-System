@@ -2,7 +2,7 @@ import { isHttpError } from "http-errors";
 
 import logger from "../config/logger.js";
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
   if (isHttpError(err)) {
     if (err.status >= 500) {
       logger.error(`${req.method} ${req.originalUrl} → ${err.status} ${err.message}`);
@@ -18,7 +18,7 @@ const errorHandler = (err, req, res, next) => {
 
   logger.error(`Unhandled Error: ${err.message}`, { stack: err.stack });
 
-  res.status(500).json({
+  return res.status(500).json({
     success: false,
     message: "Internal Server Error",
   });

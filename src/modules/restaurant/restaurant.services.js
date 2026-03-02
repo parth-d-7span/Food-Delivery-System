@@ -1,20 +1,16 @@
-import httpStatus from "http-status";
 import mongoose from "mongoose";
+
+import { BadRequest, NotFound } from "../../utils/errors.js";
 
 import restaurantDAO from "./restaurant.dao.js";
 
-const assertValidRestaurantId = (id) => {
+const assertValidObjectId = (id, label = "ID") => {
   if (!mongoose.isValidObjectId(id)) {
-    const error = new Error("Invalid restaurant ID");
-    error.statusCode = httpStatus.BAD_REQUEST;
-    throw error;
+    throw BadRequest(`Invalid ${label}.`);
   }
 };
 
-//Add a new restaurant
-
 const addRestaurant = async (body, userId) => {
-  // body has already been validated by Zod middleware (shape + types)
   const restaurant = await restaurantDAO.createRestaurant({
     ...body,
     isActive: true,
@@ -25,68 +21,45 @@ const addRestaurant = async (body, userId) => {
   return restaurant;
 };
 
-//Fetch all restaurants
-
 const fetchAllRestaurants = async () => {
-  const restaurants = await restaurantDAO.getAllRestaurants();
-  return restaurants;
+  return restaurantDAO.getAllRestaurants();
 };
 
-//  Fetch a single restaurant by ID
-
 const fetchRestaurantById = async (id) => {
-  assertValidRestaurantId(id);
+  assertValidObjectId(id, "restaurant ID");
+
   const restaurant = await restaurantDAO.getRestaurantById(id);
-  if (!restaurant) {
-    const error = new Error("Restaurant not found");
-    error.statusCode = httpStatus.NOT_FOUND;
-    throw error;
-  }
+  if (!restaurant) throw NotFound("Restaurant not found.");
+
   return restaurant;
 };
 
-// Update restaurant details
-
 const modifyRestaurant = async (id, body, userId) => {
-  assertValidRestaurantId(id);
-  const restaurant = await restaurantDAO.getRestaurantById(id);
-  if (!restaurant) {
-    const error = new Error("Restaurant not found");
-    error.statusCode = httpStatus.NOT_FOUND;
-    throw error;
-  }
+  assertValidObjectId(id, "restaurant ID");
 
-  // body already validated; just spread into update
-  const updated = await restaurantDAO.updateRestaurantById(id, {
+  const restaurant = await restaurantDAO.getRestaurantById(id);
+  if (!restaurant) throw NotFound("Restaurant not found.");
+
+  return restaurantDAO.updateRestaurantById(id, {
     ...body,
     updatedBy: userId,
   });
-
-  return updated;
 };
-
-
-// Soft delete a restaurant
 
 const removeRestaurant = async (id, userId) => {
-  assertValidRestaurantId(id);
+  assertValidObjectId(id, "restaurant ID");
+
   const restaurant = await restaurantDAO.getRestaurantById(id);
-  if (!restaurant) {
-    const error = new Error("Restaurant not found");
-    error.statusCode = httpStatus.NOT_FOUND;
-    throw error;
-  }
+  if (!restaurant) throw NotFound("Restaurant not found.");
 
   await restaurantDAO.softDeleteRestaurantById(id, userId);
-  return { message: "Restaurant deleted successfully" };
+  return { message: "Restaurant deleted successfully." };
 };
 
-const restaurantService = {
+export default {
   addRestaurant,
   fetchAllRestaurants,
   fetchRestaurantById,
   modifyRestaurant,
   removeRestaurant,
 };
-
-export default restaurantService;

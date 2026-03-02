@@ -8,7 +8,7 @@ import {
 const getUsers = async (req, res, next) => {
   try {
     const users = await getAllUsers();
-    res.status(200).json({ success: true, message: "Users fetched successfully.", data: { users } });
+    return res.status(200).json({ success: true, message: "Users fetched successfully.", data: { users } });
   } catch (error) {
     next(error);
   }
@@ -18,7 +18,7 @@ const getUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await getUserService(id);
-    res.status(200).json({ success: true, message: "User fetched successfully.", data: { user } });
+    return res.status(200).json({ success: true, message: "User fetched successfully.", data: { user } });
   } catch (error) {
     next(error);
   }
@@ -39,7 +39,7 @@ const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     await deleteUserService(id);
-    res.status(200).json({ success: true, message: "User deleted successfully." });
+    return res.status(200).json({ success: true, message: "User deleted successfully." });
   } catch (error) {
     next(error);
   }

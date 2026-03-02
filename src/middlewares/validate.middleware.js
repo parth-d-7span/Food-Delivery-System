@@ -1,41 +1,15 @@
-import ApiError from "../utils/ApiError.js";
+import { BadRequest } from "../utils/errors.js";
 
-const validate = (schema) => {
+const validate = (schema) => (req, res, next) => {
+  const { error, value } = schema.validate(req.body, { abortEarly: false });
 
-  return (req, res, next) => {
-    let error;
+  if (error) {
+    const message = error.details.map((detail) => detail.message).join(". ");
+    return next(BadRequest(message));
+  }
 
-    // Joi-style schema has a validate() method
-    if (schema && typeof schema.validate === "function") {
-      ({ error } = schema.validate(req.body));
-    } else if (schema && typeof schema.safeParse === "function") {
-      // Zod-style schema uses safeParse
-      const result = schema.safeParse(req.body);
-      if (!result.success) {
-        error = {
-          details: result.error.issues.map((issue) => ({ message: issue.message })),
-        };
-      }
-    } else if (schema && typeof schema.parse === "function") {
-      // generic parse-only schema (Zod without safeParse)
-      try {
-        schema.parse(req.body);
-      } catch (err) {
-        error = {
-          details: err.errors || [{ message: err.message }],
-        };
-      }
-    } else {
-      return next(new ApiError(500, "Invalid validation schema provided"));
-    }
-
-    if (error) {
-      return next(new ApiError(400, error.details[0].message));
-    }
-
-    next();
-  };
-
+  req.body = value;
+  next();
 };
 
 export default validate;
