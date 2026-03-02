@@ -3,12 +3,9 @@ import DailyRotateFile from "winston-daily-rotate-file";
 
 import { NODE_ENV } from "../utils/env.js";
 
-// ─── Log Format ───────────────────────────────────────────────────────────────
-// Combines timestamp + colorized level + message into one readable line
-// Example: 2024-01-01 10:00:00 [INFO] : Server started
 const logFormat = winston.format.combine(
   winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-  winston.format.errors({ stack: true }), // include stack trace on errors
+  winston.format.errors({ stack: true }),
   winston.format.printf(({ timestamp, level, message, stack }) => {
     if (stack) {
       return `${timestamp} [${level.toUpperCase()}] : ${message}\n${stack}`;
@@ -29,9 +26,6 @@ const consoleFormat = winston.format.combine(
   }),
 );
 
-// ─── Daily Rotate File — Error Logs ──────────────────────────────────────────
-// Writes only error level logs to logs/error-YYYY-MM-DD.log
-// Keeps logs for 30 days, max 20MB per file
 const errorFileTransport = new DailyRotateFile({
   filename: "logs/error-%DATE%.log",
   datePattern: "YYYY-MM-DD",
@@ -41,8 +35,6 @@ const errorFileTransport = new DailyRotateFile({
   format: logFormat,
 });
 
-// ─── Daily Rotate File — Combined Logs ───────────────────────────────────────
-// Writes all logs (info, warn, error) to logs/combined-YYYY-MM-DD.log
 const combinedFileTransport = new DailyRotateFile({
   filename: "logs/combined-%DATE%.log",
   datePattern: "YYYY-MM-DD",
@@ -51,7 +43,6 @@ const combinedFileTransport = new DailyRotateFile({
   format: logFormat,
 });
 
-// ─── Logger Instance ──────────────────────────────────────────────────────────
 const logger = winston.createLogger({
   level: NODE_ENV === "production" ? "warn" : "info",
   transports: [

@@ -9,9 +9,6 @@ import {
   deleteCartItemsByUserId,
 } from "./cart.dao.js";
 
-// payloads are validated by Zod middleware before reaching service
-
-// Validate that cart belongs to authenticated user
 const validateCartOwnership = (cart, userId) => {
   if (!cart) {
     throw createError.NotFound("Cart not found.");
@@ -50,10 +47,7 @@ const addItemToCart = async (userId, payload) => {
   const { menuItemId } = payload;
   validateObjectId(menuItemId, "Menu item ID");
 
-  // verify menu item exists and is available
-  const { default: menuDAO } = await import(
-    "../menu-management/menu.dao.js"
-  );
+  const { default: menuDAO } = await import("../menu-management/menu.dao.js");
   const menuItem = await menuDAO.findById(menuItemId);
   if (!menuItem || menuItem.isAvailable === false) {
     const error = new Error("Menu item not found or unavailable.");
@@ -71,7 +65,7 @@ const addItemToCart = async (userId, payload) => {
   validateCartOwnership(cart, userId);
 
   const existingItemIndex = cart.items.findIndex(
-    (item) => item.menuItemId.toString() === nextItem.menuItemId,
+    (item) => item.menuItemId.toString() === nextItem.menuItemId
   );
 
   if (existingItemIndex >= 0) {
@@ -95,7 +89,6 @@ const updateCartItemQuantity = async (userId, menuItemId, quantity) => {
   const itemIndex = cart.items.findIndex((item) => item.menuItemId.toString() === menuItemId);
   if (itemIndex < 0) throw createError.NotFound("Cart item not found.");
 
-  // quantity already validated as positive integer
   if (quantity <= 0) {
     cart.items.splice(itemIndex, 1);
   } else {

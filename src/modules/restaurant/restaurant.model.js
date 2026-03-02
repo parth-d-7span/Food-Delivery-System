@@ -46,13 +46,14 @@ const restaurantSchema = new mongoose.Schema(
   }
 );
 
-// Soft-delete filter — exclude deleted restaurants by default
 restaurantSchema.pre("find", function () {
   this.where({ deletedAt: null });
 });
 
 restaurantSchema.pre("findOne", function () {
-  this.where({ deletedAt: null });
+  if (!this.mongooseOptions().populate) {
+    this.where({ deletedAt: null });
+  }
 });
 
 restaurantSchema.pre("findOneAndUpdate", function () {
