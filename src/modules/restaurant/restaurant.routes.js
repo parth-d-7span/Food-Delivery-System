@@ -1,11 +1,11 @@
 import { Router } from "express";
 
-import authorize from "../../middlewares/authorize.js";
+import authorize from "../../middlewares/authorize.middleware.js";
 import ROLES from "../../constants/roles.js";
-import authenticate from "../../middlewares/authenticate.js";
+import authenticate from "../../middlewares/authenticate.middleware.js";
 import validate from "../../middlewares/validate.middleware.js";
-import { addRestaurantSchema, updateRestaurantSchema } from "./restaurant.validation.js";
 
+import { addRestaurantSchema, updateRestaurantSchema } from "./restaurant.validation.js";
 import * as restaurantController from "./restaurant.controller.js";
 
 const router = Router();

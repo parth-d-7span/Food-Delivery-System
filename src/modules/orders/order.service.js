@@ -93,7 +93,7 @@ const getOrder = async (orderId, requestedBy) => {
   return { order, orderItems };
 };
 
-const getMyOrders = async (userId) => findOrdersByUser(userId);
+const getOrders = async (userId) => findOrdersByUser(userId);
 const getAllOrders = async () => findAllOrders();
 
 const cancelOrder = async (orderId, requestedBy) => {
@@ -133,4 +133,4 @@ const updateStatus = async (orderId, newStatus) => {
   logger.info(`Order status updated: ${orderId} | '${order.status}' → '${newStatus}'`);
 };
 
-export { placeOrder, getOrder, getMyOrders, getAllOrders, cancelOrder, updateStatus };
+export { placeOrder, getOrder, getOrders, getAllOrders, cancelOrder, updateStatus };

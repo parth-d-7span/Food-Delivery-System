@@ -3,8 +3,8 @@ import express from "express";
 import { API_PREFIX, PORT, NODE_ENV } from "./src/utils/env.js";
 import connectDB from "./src/config/db.js";
 import logger from "./src/config/logger.js";
-import requestLogger from "./src/middlewares/requestLogger.js";
-import errorHandler from "./src/middlewares/errorHandler.js";
+import requestLogger from "./src/middlewares/requestLogger.middleware.js";
+import errorHandler from "./src/middlewares/errorHandler.middleware.js";
 import router from "./src/router.js";
 
 const app = express();

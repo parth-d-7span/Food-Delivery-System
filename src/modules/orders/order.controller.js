@@ -1,20 +1,22 @@
+import httpStatus from "http-status";
+
 import {
-  placeOrder,
-  getOrder,
-  getMyOrders,
-  getAllOrders,
-  cancelOrder,
-  updateStatus,
+  placeOrder as placeOrderService,
+  getOrder as getOrderService,
+  getOrders as getOrdersService,
+  getAllOrders as getAllOrdersService,
+  cancelOrder as cancelOrderService,
+  updateStatus as updateStatusService,
 } from "./order.service.js";
 
-const placeOrderHandler = async (req, res, next) => {
+const placeOrder = async (req, res, next) => {
   try {
     const { deliveryAddress } = req.body;
-    const order = await placeOrder({
+    const order = await placeOrderService({
       userId: req.user._id,
       deliveryAddress,
     });
-    return res.status(201).json({
+    return res.status(httpStatus.CREATED).json({
       success: true,
       message: "Order placed successfully.",
       data: { order },
@@ -24,10 +26,10 @@ const placeOrderHandler = async (req, res, next) => {
   }
 };
 
-const getMyOrdersHandler = async (req, res, next) => {
+const getMyOrders = async (req, res, next) => {
   try {
-    const orders = await getMyOrders(req.user._id);
-    return res.status(200).json({
+    const orders = await getOrdersService(req.user._id);
+    return res.status(httpStatus.OK).json({
       success: true,
       message: "Orders fetched successfully.",
       data: { orders },
@@ -37,10 +39,10 @@ const getMyOrdersHandler = async (req, res, next) => {
   }
 };
 
-const getAllOrdersHandler = async (req, res, next) => {
+const getAllOrders = async (req, res, next) => {
   try {
-    const orders = await getAllOrders();
-    return res.status(200).json({
+    const orders = await getAllOrdersService();
+    return res.status(httpStatus.OK).json({
       success: true,
       message: "All orders fetched successfully.",
       data: { orders },
@@ -50,11 +52,11 @@ const getAllOrdersHandler = async (req, res, next) => {
   }
 };
 
-const getOrderHandler = async (req, res, next) => {
+const getOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { order, orderItems } = await getOrder(id, req.user);
-    return res.status(200).json({
+    const { order, orderItems } = await getOrderService(id, req.user);
+    return res.status(httpStatus.OK).json({
       success: true,
       message: "Order fetched successfully.",
       data: { order, orderItems },
@@ -64,11 +66,11 @@ const getOrderHandler = async (req, res, next) => {
   }
 };
 
-const cancelOrderHandler = async (req, res, next) => {
+const cancelOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
-    await cancelOrder(id, req.user);
-    return res.status(200).json({
+    await cancelOrderService(id, req.user);
+    return res.status(httpStatus.OK).json({
       success: true,
       message: "Order cancelled successfully.",
     });
@@ -77,12 +79,12 @@ const cancelOrderHandler = async (req, res, next) => {
   }
 };
 
-const updateStatusHandler = async (req, res, next) => {
+const updateStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    await updateStatus(id, status);
-    return res.status(200).json({
+    await updateStatusService(id, status);
+    return res.status(httpStatus.OK).json({
       success: true,
       message: "Order status updated successfully.",
     });
@@ -91,11 +93,4 @@ const updateStatusHandler = async (req, res, next) => {
   }
 };
 
-export {
-  placeOrderHandler,
-  getMyOrdersHandler,
-  getAllOrdersHandler,
-  getOrderHandler,
-  cancelOrderHandler,
-  updateStatusHandler,
-};
+export { placeOrder, getMyOrders, getAllOrders, getOrder, cancelOrder, updateStatus };
