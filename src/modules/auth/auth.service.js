@@ -22,7 +22,7 @@ const register = async ({ name, email, password, phoneNumber, address, role }) =
 
   logger.info(`New user registered: ${email} [${user.role}]`);
 
-  return user._id;
+  return generateToken({ id: user._id, role: user.role });
 };
 
 const login = async ({ email, password }) => {

@@ -4,7 +4,7 @@ import {
   findAllUsers,
   findUserById,
   updateUserById,
-  softDeleteUserById,
+  DeleteUserById,
 } from "./user.dao.js";
 
 const getAllUsers = async () => findAllUsers();
@@ -25,7 +25,7 @@ const updateUser = async (id, data) => {
 };
 
 const deleteUser = async (id) => {
-  const user = await softDeleteUserById(id);
+  const user = await DeleteUserById(id);
   if (!user) throw NotFound("User not found.");
 };
 

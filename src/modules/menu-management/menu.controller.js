@@ -1,9 +1,11 @@
+import httpStatus from "http-status";
+
 import menuService from "./menu.service.js";
 
 const getAllMenuItems = async (req, res, next) => {
   try {
     const menuItems = await menuService.getAllMenuItems();
-    return res.status(200).json({
+    return res.status(httpStatus.OK).json({
       success: true,
       count: menuItems.length,
       data: menuItems,
@@ -17,7 +19,7 @@ const getMenuByRestaurant = async (req, res, next) => {
   try {
     const { restaurantId } = req.params;
     const menu = await menuService.getMenuByRestaurant(restaurantId);
-    return res.status(200).json({
+    return res.status(httpStatus.OK).json({
       success: true,
       message: "Menu fetched successfully.",
       data: menu,
@@ -34,7 +36,7 @@ const addMenu = async (req, res, next) => {
 
     const menu = await menuService.addMenuItem({ ...req.body, image: imageUrl }, restaurantId);
 
-    return res.status(201).json({
+    return res.status(httpStatus.CREATED).json({
       success: true,
       message: "Menu created successfully.",
       data: menu,
@@ -55,7 +57,7 @@ const updateMenu = async (req, res, next) => {
 
     const updated = await menuService.updateMenu(req.params.menuId, userId, updateData);
 
-    return res.status(200).json({
+    return res.status(httpStatus.OK).json({
       success: true,
       message: "Menu updated successfully.",
       data: updated,
@@ -70,7 +72,7 @@ const deleteMenu = async (req, res, next) => {
     const restaurantId = req.user._id;
     await menuService.deleteMenu(req.params.menuId, restaurantId);
 
-    return res.status(200).json({
+    return res.status(httpStatus.OK).json({
       success: true,
       message: "Menu deleted successfully.",
     });
@@ -79,10 +81,4 @@ const deleteMenu = async (req, res, next) => {
   }
 };
 
-export default {
-  getAllMenuItems,
-  getMenuByRestaurant,
-  addMenu,
-  updateMenu,
-  deleteMenu,
-};
+export { getAllMenuItems, getMenuByRestaurant, addMenu, updateMenu, deleteMenu };

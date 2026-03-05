@@ -9,11 +9,11 @@ const updateUserById = async (id, data) =>
     "-passwordHash",
   );
 
-const softDeleteUserById = async (id) =>
+const DeleteUserById = async (id) =>
   User.findByIdAndUpdate(
     id,
     { deletedAt: new Date() },
     { returnDocument: "after" },
   );
 
-export { findAllUsers, findUserById, updateUserById, softDeleteUserById };
+export { findAllUsers, findUserById, updateUserById, DeleteUserById };

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 import { BadRequest, NotFound } from "../../utils/errors.js";
 
-import restaurantDAO from "./restaurant.dao.js";
+import { createRestaurant, updateRestaurantById, DeleteRestaurantById, getRestaurantById, getAllRestaurants } from "./restaurant.dao.js";
 
 const assertValidObjectId = (id, label = "ID") => {
   if (!mongoose.isValidObjectId(id)) {
@@ -11,7 +11,7 @@ const assertValidObjectId = (id, label = "ID") => {
 };
 
 const addRestaurant = async (body, userId) => {
-  const restaurant = await restaurantDAO.createRestaurant({
+  const restaurant = await createRestaurant({
     ...body,
     isActive: true,
     createdBy: userId,
@@ -21,14 +21,16 @@ const addRestaurant = async (body, userId) => {
   return restaurant;
 };
 
-const fetchAllRestaurants = async () => {
-  return restaurantDAO.getAllRestaurants();
+const allRestaurants = async () => {
+  const restaurant = await getAllRestaurants();
+  return restaurant;
 };
 
-const fetchRestaurantById = async (id) => {
+
+const restaurantById = async (id) => {
   assertValidObjectId(id, "restaurant ID");
 
-  const restaurant = await restaurantDAO.getRestaurantById(id);
+  const restaurant = await getRestaurantById(id);
   if (!restaurant) throw NotFound("Restaurant not found.");
 
   return restaurant;
@@ -37,10 +39,10 @@ const fetchRestaurantById = async (id) => {
 const modifyRestaurant = async (id, body, userId) => {
   assertValidObjectId(id, "restaurant ID");
 
-  const restaurant = await restaurantDAO.getRestaurantById(id);
+  const restaurant = await getRestaurantById(id);
   if (!restaurant) throw NotFound("Restaurant not found.");
 
-  return restaurantDAO.updateRestaurantById(id, {
+  return updateRestaurantById(id, {
     ...body,
     updatedBy: userId,
   });
@@ -49,17 +51,11 @@ const modifyRestaurant = async (id, body, userId) => {
 const removeRestaurant = async (id, userId) => {
   assertValidObjectId(id, "restaurant ID");
 
-  const restaurant = await restaurantDAO.getRestaurantById(id);
+  const restaurant = await getRestaurantById(id);
   if (!restaurant) throw NotFound("Restaurant not found.");
 
-  await restaurantDAO.softDeleteRestaurantById(id, userId);
+  await DeleteRestaurantById(id, userId);
   return { message: "Restaurant deleted successfully." };
 };
 
-export default {
-  addRestaurant,
-  fetchAllRestaurants,
-  fetchRestaurantById,
-  modifyRestaurant,
-  removeRestaurant,
-};
+export { addRestaurant, allRestaurants, restaurantById, modifyRestaurant, removeRestaurant };

@@ -19,7 +19,7 @@ const updateRestaurantById = async (id, data) => {
   });
 };
 
-const softDeleteRestaurantById = async (id, userId) => {
+const DeleteRestaurantById = async (id, userId) => {
   return Restaurant.findByIdAndUpdate(
     id,
     { deletedAt: new Date(), updatedBy: userId },
@@ -27,12 +27,4 @@ const softDeleteRestaurantById = async (id, userId) => {
   );
 };
 
-const restaurantDAO = {
-  createRestaurant,
-  getAllRestaurants,
-  getRestaurantById,
-  updateRestaurantById,
-  softDeleteRestaurantById,
-};
-
-export default restaurantDAO;
+export { createRestaurant, getAllRestaurants, getRestaurantById, updateRestaurantById, DeleteRestaurantById };
