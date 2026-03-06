@@ -41,10 +41,9 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-// Automatically exclude soft-deleted users from all find queries
 userSchema.pre("find", function () {
   this.where({ deletedAt: null });
 });

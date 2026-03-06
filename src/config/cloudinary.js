@@ -1,22 +1,11 @@
 import { v2 as cloudinary } from "cloudinary";
 
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } from "../utils/env.js";
+
 cloudinary.config({
-
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-
-  api_key: process.env.CLOUDINARY_API_KEY,
-
-  api_secret: process.env.CLOUDINARY_API_SECRET
-
-  
-
+  cloudName: CLOUDINARY_CLOUD_NAME,
+  apiKey: CLOUDINARY_API_KEY,
+  apiSecret: CLOUDINARY_API_SECRET,
 });
-
-// console.log("Cloudinary loaded:", {
-//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.CLOUDINARY_API_KEY ? "loaded" : "missing",
-//   api_secret: process.env.CLOUDINARY_API_SECRET ? "loaded" : "missing"
-// });
-
 
 export default cloudinary;
