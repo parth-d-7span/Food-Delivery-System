@@ -44,6 +44,21 @@ npm run format
 
 ---
 
+## 🏪 Admin Flow
+
+```
+1. Register / Login as admin
+2. Add restaurant           → POST /api/v1/restaurants
+3. Add menu items           → POST /api/v1/menu (form-data with restaurantId)
+4. View all orders          → GET /api/v1/orders
+5. Confirm order            → PATCH /api/v1/orders/:id/status { "status": "confirmed" }
+6. Mark delivered           → PATCH /api/v1/orders/:id/status { "status": "delivered" }
+7. Update/Delete restaurant → PUT or DELETE /api/v1/restaurants/:id
+8. Update/Delete menu item  → PUT or DELETE /api/v1/menu/:menuId
+```
+
+---
+
 ## 🔄 Order Flow
 
 ```
