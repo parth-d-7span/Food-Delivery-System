@@ -2,7 +2,7 @@ import { isHttpError } from "http-errors";
 
 import logger from "../config/logger.js";
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
   if (isHttpError(err)) {
     if (err.status >= 500) {
       logger.error(`${req.method} ${req.originalUrl} → ${err.status} ${err.message}`);
