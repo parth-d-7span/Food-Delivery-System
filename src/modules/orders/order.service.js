@@ -4,6 +4,7 @@ import { BadRequest, NotFound, Forbidden } from "../../utils/errors.js";
 import logger from "../../config/logger.js";
 import Cart from "../cart/cart.model.js";
 import ROLES from "../../constants/roles.js";
+import menuDAO from "../menu-management/menu.dao.js";
 
 import { ORDER_STATUS } from "./order.model.js";
 import {
@@ -23,7 +24,6 @@ const placeOrder = async ({ userId, deliveryAddress }) => {
     throw BadRequest("Your cart is empty. Add items before placing an order.");
   }
 
-  const { default: menuDAO } = await import("../menu-management/menu.dao.js");
   const firstMenuItem = await menuDAO.findById(cart.items[0].menuItemId);
 
   if (!firstMenuItem) {

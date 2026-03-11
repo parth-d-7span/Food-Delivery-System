@@ -8,6 +8,7 @@ import {
   saveCart,
   deleteCartItemsByUserId,
 } from "./cart.dao.js";
+import menuDAO from "../menu-management/menu.dao.js";
 
 const validateCartOwnership = (cart, userId) => {
   if (!cart) {
@@ -47,7 +48,6 @@ const addItemToCart = async (userId, payload) => {
   const { menuItemId } = payload;
   validateObjectId(menuItemId, "Menu item ID");
 
-  const { default: menuDAO } = await import("../menu-management/menu.dao.js");
   const menuItem = await menuDAO.findById(menuItemId);
   if (!menuItem || menuItem.isAvailable === false) {
     const error = new Error("Menu item not found or unavailable.");
