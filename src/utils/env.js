@@ -1,6 +1,15 @@
 import dotenv from "dotenv";
 
-dotenv.config();
+const scriptName = process.env.npm_lifecycle_event;
+const configuredEnvironment = process.env.NODE_ENV;
+
+let envFilePath = ".env.development";
+
+if (configuredEnvironment === "production" || scriptName === "start") {
+  envFilePath = ".env.production";
+}
+
+dotenv.config({ path: envFilePath });
 
 export const PORT = process.env.PORT || 5000;
 export const NODE_ENV = process.env.NODE_ENV || "development";
