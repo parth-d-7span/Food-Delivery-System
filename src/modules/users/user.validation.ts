@@ -1,5 +1,7 @@
 import Joi from "joi";
 
+import type { LoginInput, RegisterUserInput, UpdateUserInput } from "../../types/auth.types.js";
+
 const nameSchema = Joi.string().trim().min(2).required().messages({
   "string.empty": "Name is required.",
   "string.min": "Name must be at least 2 characters.",
@@ -38,7 +40,7 @@ const roleSchema = Joi.string().valid("customer", "admin").default("customer").m
   "any.only": "Role must be either customer or admin.",
 });
 
-export const registerSchema = Joi.object({
+export const registerSchema = Joi.object<RegisterUserInput>({
   name: nameSchema,
   email: emailSchema,
   password: passwordSchema,
@@ -47,12 +49,12 @@ export const registerSchema = Joi.object({
   role: roleSchema,
 });
 
-export const loginSchema = Joi.object({
+export const loginSchema = Joi.object<LoginInput>({
   email: emailSchema,
   password: passwordSchema,
 });
 
-export const updateUserSchema = Joi.object({
+export const updateUserSchema = Joi.object<UpdateUserInput>({
   name: Joi.string().trim().min(2).messages({
     "string.min": "Name must be at least 2 characters.",
   }),
