@@ -3,7 +3,7 @@ import type { NextFunction, RequestHandler, Response } from "express";
 
 import type { ApiSuccessResponse } from "../../types/api.types.js";
 import type { UpdateUserInput } from "../../types/auth.types.js";
-import type { PublicUser } from "../../types/user.types.js";
+import type { PaginatedUsers, PublicUser, UserPaginationQuery } from "../../types/user.types.js";
 
 import {
   deleteUser as deleteUserService,
@@ -16,13 +16,13 @@ type IdParams = { id: string };
 
 const getAllUsers: RequestHandler<
   Record<string, never>,
-  ApiSuccessResponse<{ users: PublicUser[] }>
-> = async (_request, response, next) => {
+  ApiSuccessResponse<PaginatedUsers>
+> = async (request, response, next) => {
   try {
-    const users = await getAllUsersService();
+    const users = await getAllUsersService(request.validatedQuery as UserPaginationQuery);
     response
       .status(httpStatus.OK)
-      .json({ success: true, message: "Users fetched successfully.", data: { users } });
+      .json({ success: true, message: "Users fetched successfully.", data: users });
   } catch (error) {
     next(error);
   }

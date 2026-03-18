@@ -20,6 +20,23 @@ export interface UserRecord extends UserEntity {
 
 export type PublicUser = Omit<UserRecord, "passwordHash">;  //Create a new type from Type but remove some keys.(Take UserRecord , remove passwordHash property)
 
+export interface UserPaginationQuery {
+  page: number;
+  limit: number;
+}
+
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export interface PaginatedUsers {
+  users: PublicUser[];
+  pagination: PaginationMeta;
+}
+
 export interface UserCreateInput {
   name: string;
   email: string;

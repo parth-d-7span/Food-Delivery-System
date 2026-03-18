@@ -1,9 +1,26 @@
-import type { PublicUser, UserUpdateInput } from "../../types/user.types.js";
+import type {
+  PaginatedUsers,
+  PublicUser,
+  UserPaginationQuery,
+  UserUpdateInput,
+} from "../../types/user.types.js";
 import { NotFound } from "../../utils/errors.js";
 
 import { deleteUserById, findAllUsers, findUserById, updateUserById } from "./user.dao.js";
 
-const getAllUsers = async (): Promise<PublicUser[]> => findAllUsers();
+const getAllUsers = async ({ page, limit }: UserPaginationQuery): Promise<PaginatedUsers> => {
+  const { users, totalItems } = await findAllUsers(page, limit);
+
+  return {
+    users,
+    pagination: {
+      page,
+      limit,
+      totalItems,
+      totalPages: Math.ceil(totalItems / limit),
+    },
+  };
+};
 
 const getUser = async (id: string): Promise<PublicUser> => {
   const user = await findUserById(id);
