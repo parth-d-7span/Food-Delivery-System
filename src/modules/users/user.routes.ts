@@ -1,0 +1,20 @@
+import { Router } from "express";
+
+import ROLES from "../../constants/roles.js";
+import authenticate from "../../middlewares/authenticate.middleware.js";
+import authorize from "../../middlewares/authorize.middleware.js";
+import authorizeUserAccess from "../../middlewares/authorizeUserAccess.middleware.js";
+import validateQuery from "../../middlewares/validateQuery.middleware.js";
+import validate from "../../middlewares/validate.middleware.js";
+
+import { deleteUser, getAllUsers, getUser, updateUser } from "./user.controller.js";
+import { getAllUsersQuerySchema, updateUserSchema } from "./user.validation.js";
+
+const router = Router();
+
+router.get("/", authenticate, authorize(ROLES.ADMIN), validateQuery(getAllUsersQuerySchema), getAllUsers);
+router.get("/:id", authenticate, authorizeUserAccess, getUser);
+router.put("/:id", authenticate, authorizeUserAccess, validate(updateUserSchema), updateUser);
+router.delete("/:id", authenticate, authorizeUserAccess, deleteUser);
+
+export default router;

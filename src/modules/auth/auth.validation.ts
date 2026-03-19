@@ -1,5 +1,7 @@
 import Joi from "joi";
 
+import type { LoginInput, RegisterUserInput } from "./auth.dto.js";
+
 const nameSchema = Joi.string().trim().min(2).required().messages({
   "string.empty": "Name is required.",
   "string.min": "Name must be at least 2 characters.",
@@ -38,7 +40,7 @@ const roleSchema = Joi.string().valid("customer", "admin").default("customer").m
   "any.only": "Role must be either customer or admin.",
 });
 
-export const registerSchema = Joi.object({
+export const registerSchema = Joi.object<RegisterUserInput>({
   name: nameSchema,
   email: emailSchema,
   password: passwordSchema,
@@ -47,26 +49,7 @@ export const registerSchema = Joi.object({
   role: roleSchema,
 });
 
-export const loginSchema = Joi.object({
+export const loginSchema = Joi.object<LoginInput>({
   email: emailSchema,
   password: passwordSchema,
 });
-
-export const updateUserSchema = Joi.object({
-  name: Joi.string().trim().min(2).messages({
-    "string.min": "Name must be at least 2 characters.",
-  }),
-  phoneNumber: Joi.string()
-    .trim()
-    .pattern(/^[6-9]\d{9}$/)
-    .messages({
-      "string.pattern.base": "Please provide a valid 10-digit phone number.",
-    }),
-  address: Joi.string().trim().min(5).messages({
-    "string.min": "Address must be at least 5 characters.",
-  }),
-})
-  .min(1)
-  .messages({
-    "object.min": "Provide at least one field to update: name, phoneNumber, address.",
-  });
