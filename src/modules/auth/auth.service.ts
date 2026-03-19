@@ -2,10 +2,10 @@ import logger from "../../config/logger.js";
 import ROLES from "../../constants/roles.js";
 import type { JwtPayload, LoginInput, RegisterUserInput } from "../../types/auth.types.js";
 import { Conflict, Unauthorized } from "../../utils/errors.js";
-import { hashPassword, verifyPassword } from "../../utils/hash.js";
+import { hashPassword } from "../../utils/hash.js";
 import { generateToken } from "../../utils/jwt.js";
 
-import { createUser, findUserByEmail, findUserByEmailWithPassword } from "./auth.dao.js";
+import { createUser, findUserByEmail, findVerifiedUserByEmail } from "./auth.dao.js";
 
 const buildTokenPayload = (id: string, role: JwtPayload["role"]): JwtPayload => ({ id, role });
 
@@ -39,15 +39,9 @@ const register = async ({
 };
 
 const login = async ({ email, password }: LoginInput): Promise<string> => {
-  const user = await findUserByEmailWithPassword(email);
+  const user = await findVerifiedUserByEmail(email, password);
 
   if (!user) {
-    throw Unauthorized("Invalid email or password.");
-  }
-
-  const isMatch = await verifyPassword(password, user.passwordHash);
-
-  if (!isMatch) {
     throw Unauthorized("Invalid email or password.");
   }
 

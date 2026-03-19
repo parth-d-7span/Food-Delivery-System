@@ -19,6 +19,7 @@ export interface UserRecord extends UserEntity {
 }
 
 export type PublicUser = Omit<UserRecord, "passwordHash">;  //Create a new type from Type but remove some keys.(Take UserRecord , remove passwordHash property)
+export type AuthUser = Pick<PublicUser, "_id" | "role">;
 
 export interface UserPaginationQuery {
   page: number;
