@@ -11,4 +11,9 @@ export interface ApiSuccessResponse<TData = undefined, TMeta = undefined> {
   meta?: TMeta;
 }
 
+export interface ApiErrorResponse {
+  success: false;
+  message: string;
+}
+
 export interface TokenResponse extends ApiSuccessResponse<{ token: string }> {}

@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import type { NextFunction, RequestHandler, Response } from "express";
 
 import type { ApiSuccessResponse, PaginationMeta } from "../../types/api.types.js";
+import { successResponse } from "../../utils/response.js";
 import type { PaginatedUsers, UserPaginationQuery } from "./dto/userQuery.dto.js";
 import type { PublicUser, UserUpdateInput } from "./dto/user.dto.js";
 
@@ -37,7 +38,7 @@ const getAllUsers: RequestHandler<
       },
     };
 
-    response.status(httpStatus.OK).json(body);
+    successResponse(response, httpStatus.OK, body);
   } catch (error) {
     next(error);
   }
@@ -56,7 +57,7 @@ const getUser: RequestHandler<
       data: { user },
     };
 
-    response.status(httpStatus.OK).json(body);
+    successResponse(response, httpStatus.OK, body);
   } catch (error) {
     next(error);
   }
@@ -75,7 +76,7 @@ const updateUser: RequestHandler<IdParams, ApiSuccessResponse, UserUpdateInput> 
       message: "User updated successfully.",
     };
 
-    response.status(httpStatus.OK).json(body);
+    successResponse(response, httpStatus.OK, body);
   } catch (error) {
     next(error);
   }
@@ -94,7 +95,7 @@ const deleteUser: RequestHandler<IdParams, ApiSuccessResponse> = async (
       message: "User deleted successfully.",
     };
 
-    response.status(httpStatus.OK).json(body);
+    successResponse(response, httpStatus.OK, body);
   } catch (error) {
     next(error);
   }
