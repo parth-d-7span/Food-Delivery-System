@@ -3,8 +3,8 @@ import type { NextFunction, RequestHandler, Response } from "express";
 
 import type { ApiSuccessResponse, PaginationMeta } from "../../types/api.types.js";
 import { successResponse } from "../../utils/response.js";
-import type { PaginatedUsers, UserPaginationQuery } from "./dto/userQuery.dto.js";
-import type { PublicUser, UserUpdateInput } from "./dto/user.dto.js";
+import type { PaginatedUsers, UserPaginationQuery, UserUpdateInput } from "./user.dto.js";
+import type { PublicUser } from "./user.types.js";
 
 import {
   deleteUser as deleteUserService,

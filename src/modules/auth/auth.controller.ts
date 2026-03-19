@@ -3,7 +3,7 @@ import type { RequestHandler } from "express";
 
 import type { TokenResponse } from "../../types/api.types.js";
 import { successResponse } from "../../utils/response.js";
-import type { LoginInput, RegisterUserInput } from "./dto/authRequest.dto.js";
+import type { LoginInput, RegisterUserInput } from "./auth.dto.js";
 
 import { login as loginUser, register as registerUser } from "./auth.service.js";
 

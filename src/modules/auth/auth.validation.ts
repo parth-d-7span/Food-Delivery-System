@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-import type { LoginInput, RegisterUserInput } from "./dto/authRequest.dto.js";
+import type { LoginInput, RegisterUserInput } from "./auth.dto.js";
 
 const nameSchema = Joi.string().trim().min(2).required().messages({
   "string.empty": "Name is required.",

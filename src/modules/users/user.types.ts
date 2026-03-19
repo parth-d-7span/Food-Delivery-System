@@ -1,6 +1,6 @@
 import type { Types } from "mongoose";
 
-import type { Role } from "../../../constants/roles.js";
+import type { Role } from "../../constants/roles.js";
 
 export interface UserEntity {
   name: string;
@@ -29,10 +29,4 @@ export interface UserCreateInput {
   phoneNumber: string;
   address: string;
   role: Role;
-}
-
-export interface UserUpdateInput {
-  name?: string;
-  phoneNumber?: string;
-  address?: string;
 }

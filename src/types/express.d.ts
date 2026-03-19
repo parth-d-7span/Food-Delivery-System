@@ -1,4 +1,4 @@
-import type { PublicUser } from "../modules/users/dto/user.dto.js";
+import type { PublicUser } from "../modules/users/user.types.js";
 
 declare global {
   namespace Express {

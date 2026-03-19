@@ -1,6 +1,7 @@
 import User, { type UserDocument } from "./user.model.js";
 
-import type { PublicUser, UserUpdateInput } from "./dto/user.dto.js";
+import type { UserUpdateInput } from "./user.dto.js";
+import type { PublicUser } from "./user.types.js";
 
 const findAllUsers = async (
   page: number,

@@ -2,7 +2,7 @@ import Joi from "joi";
 import jwt from "jsonwebtoken";
 
 import ROLES from "../constants/roles.js";
-import type { JwtPayload } from "../modules/auth/dto/authToken.dto.js";
+import type { JwtPayload } from "../modules/auth/auth.types.js";
 
 import { JWT_EXPIRES_IN, JWT_SECRET } from "./env.js";
 

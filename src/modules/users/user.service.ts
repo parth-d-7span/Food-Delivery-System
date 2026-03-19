@@ -1,8 +1,9 @@
 import type {
   PaginatedUsers,
   UserPaginationQuery,
-} from "./dto/userQuery.dto.js";
-import type { PublicUser, UserUpdateInput } from "./dto/user.dto.js";
+  UserUpdateInput,
+} from "./user.dto.js";
+import type { PublicUser } from "./user.types.js";
 import { NotFound } from "../../utils/errors.js";
 
 import { deleteUserById, findAllUsers, findUserById, updateUserById } from "./user.dao.js";

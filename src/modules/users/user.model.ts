@@ -1,7 +1,7 @@
 import mongoose, { type Model, type Query } from "mongoose";
 
 import ROLES, { type Role } from "../../constants/roles.js";
-import type { UserEntity } from "./dto/user.dto.js";
+import type { UserEntity } from "./user.types.js";
 
 export type UserDocument = mongoose.HydratedDocument<UserEntity>;  //used for type safety
 type UserModel = Model<UserEntity>;

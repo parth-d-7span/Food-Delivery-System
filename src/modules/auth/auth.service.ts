@@ -1,7 +1,7 @@
 import logger from "../../config/logger.js";
 import ROLES from "../../constants/roles.js";
-import type { LoginInput, RegisterUserInput } from "./dto/authRequest.dto.js";
-import type { JwtPayload } from "./dto/authToken.dto.js";
+import type { LoginInput, RegisterUserInput } from "./auth.dto.js";
+import type { JwtPayload } from "./auth.types.js";
 import { Conflict, Unauthorized } from "../../utils/errors.js";
 import { hashPassword } from "../../utils/hash.js";
 import { generateToken } from "../../utils/jwt.js";

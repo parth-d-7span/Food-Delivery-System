@@ -1,7 +1,6 @@
 import Joi from "joi";
 
-import type { UserPaginationQuery } from "./dto/userQuery.dto.js";
-import type { UserUpdateInput } from "./dto/user.dto.js";
+import type { UserPaginationQuery, UserUpdateInput } from "./user.dto.js";
 
 export const updateUserSchema = Joi.object<UserUpdateInput>({
   name: Joi.string().trim().min(2).messages({
