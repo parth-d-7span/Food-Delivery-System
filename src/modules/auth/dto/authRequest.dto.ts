@@ -1,4 +1,4 @@
-import type { Role } from "../constants/roles.js";
+import type { Role } from "../../../constants/roles.js";
 
 export interface RegisterUserInput {
   name: string;
@@ -12,15 +12,4 @@ export interface RegisterUserInput {
 export interface LoginInput {
   email: string;
   password: string;
-}
-
-export interface UpdateUserInput {
-  name?: string;
-  phoneNumber?: string;
-  address?: string;
-}
-
-export interface JwtPayload {
-  id: string;
-  role: Role;
 }

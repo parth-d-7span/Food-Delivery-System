@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 
 import User from "../modules/users/user.model.js";
-import type { PublicUser } from "../types/user.types.js";
+import type { PublicUser } from "../modules/users/dto/user.dto.js";
 import { Unauthorized } from "../utils/errors.js";
 import { verifyToken } from "../utils/jwt.js";
 

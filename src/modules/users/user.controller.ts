@@ -1,9 +1,9 @@
 import httpStatus from "http-status";
 import type { NextFunction, RequestHandler, Response } from "express";
 
-import type { ApiSuccessResponse } from "../../types/api.types.js";
-import type { UpdateUserInput } from "../../types/auth.types.js";
-import type { PaginatedUsers, PublicUser, UserPaginationQuery } from "../../types/user.types.js";
+import type { ApiSuccessResponse, PaginationMeta } from "../../types/api.types.js";
+import type { PaginatedUsers, UserPaginationQuery } from "./dto/userQuery.dto.js";
+import type { PublicUser, UserUpdateInput } from "./dto/user.dto.js";
 
 import {
   deleteUser as deleteUserService,
@@ -16,13 +16,28 @@ type IdParams = { id: string };
 
 const getAllUsers: RequestHandler<
   Record<string, never>,
-  ApiSuccessResponse<PaginatedUsers>
+  ApiSuccessResponse<{ users: PublicUser[] }, PaginationMeta & { totalItems: number; totalPages: number }>
 > = async (request, response, next) => {
   try {
     const users = await getAllUsersService(request.validatedQuery as UserPaginationQuery);
-    response
-      .status(httpStatus.OK)
-      .json({ success: true, message: "Users fetched successfully.", data: users });
+    const validatedQuery = request.validatedQuery as UserPaginationQuery;
+    const body: ApiSuccessResponse<
+      { users: PublicUser[] },
+      PaginationMeta & { totalItems: number; totalPages: number }
+    > = {
+      success: true,
+      message: "Users fetched successfully.",
+      data: { users: users.users },
+      meta: {
+        page: validatedQuery.page,
+        limit: validatedQuery.limit,
+        offset: (validatedQuery.page - 1) * validatedQuery.limit,
+        totalItems: users.totalItems,
+        totalPages: users.totalPages,
+      },
+    };
+
+    response.status(httpStatus.OK).json(body);
   } catch (error) {
     next(error);
   }
@@ -35,15 +50,19 @@ const getUser: RequestHandler<
   try {
     const { id } = request.params;
     const user = await getUserService(id);
-    response
-      .status(httpStatus.OK)
-      .json({ success: true, message: "User fetched successfully.", data: { user } });
+    const body: ApiSuccessResponse<{ user: PublicUser }> = {
+      success: true,
+      message: "User fetched successfully.",
+      data: { user },
+    };
+
+    response.status(httpStatus.OK).json(body);
   } catch (error) {
     next(error);
   }
 };
 
-const updateUser: RequestHandler<IdParams, ApiSuccessResponse, UpdateUserInput> = async (
+const updateUser: RequestHandler<IdParams, ApiSuccessResponse, UserUpdateInput> = async (
   request,
   response: Response<ApiSuccessResponse>,
   next: NextFunction,
@@ -51,7 +70,12 @@ const updateUser: RequestHandler<IdParams, ApiSuccessResponse, UpdateUserInput> 
   try {
     const { id } = request.params;
     await updateUserService(id, request.body);
-    response.status(httpStatus.OK).json({ success: true, message: "User updated successfully." });
+    const body: ApiSuccessResponse = {
+      success: true,
+      message: "User updated successfully.",
+    };
+
+    response.status(httpStatus.OK).json(body);
   } catch (error) {
     next(error);
   }
@@ -65,7 +89,12 @@ const deleteUser: RequestHandler<IdParams, ApiSuccessResponse> = async (
   try {
     const { id } = request.params;
     await deleteUserService(id);
-    response.status(httpStatus.OK).json({ success: true, message: "User deleted successfully." });
+    const body: ApiSuccessResponse = {
+      success: true,
+      message: "User deleted successfully.",
+    };
+
+    response.status(httpStatus.OK).json(body);
   } catch (error) {
     next(error);
   }

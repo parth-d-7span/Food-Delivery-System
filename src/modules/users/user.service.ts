@@ -1,9 +1,8 @@
 import type {
   PaginatedUsers,
-  PublicUser,
   UserPaginationQuery,
-  UserUpdateInput,
-} from "../../types/user.types.js";
+} from "./dto/userQuery.dto.js";
+import type { PublicUser, UserUpdateInput } from "./dto/user.dto.js";
 import { NotFound } from "../../utils/errors.js";
 
 import { deleteUserById, findAllUsers, findUserById, updateUserById } from "./user.dao.js";
@@ -13,12 +12,8 @@ const getAllUsers = async ({ page, limit }: UserPaginationQuery): Promise<Pagina
 
   return {
     users,
-    pagination: {
-      page,
-      limit,
-      totalItems,
-      totalPages: Math.ceil(totalItems / limit),
-    },
+    totalItems,
+    totalPages: Math.ceil(totalItems / limit),
   };
 };
 

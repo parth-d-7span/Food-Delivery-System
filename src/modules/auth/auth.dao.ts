@@ -1,4 +1,4 @@
-import type { AuthUser, PublicUser, UserCreateInput, UserRecord } from "../../types/user.types.js";
+import type { AuthUser, PublicUser, UserCreateInput, UserRecord } from "../users/dto/user.dto.js";
 import { verifyPassword } from "../../utils/hash.js";
 
 import User from "../users/user.model.js";
